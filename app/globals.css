@@ -390,11 +390,25 @@ a.pm-card { cursor: pointer; }
 .pm-lead-start { top: 50%; left: calc(var(--pm-gap) * -1); width: calc(var(--pm-gap) + 13%); background: linear-gradient(90deg, rgba(139, 202, 184, .5), rgba(139, 202, 184, .2)); }
 .pm-lead-final { top: 50%; right: calc(var(--pm-gap) * -1); width: calc(var(--pm-gap) + 13%); background: linear-gradient(270deg, rgba(247, 143, 33, .5), rgba(247, 143, 33, .2)); }
 .pm-node { position: absolute; width: clamp(132px, 16.5%, 188px); transform: translate(-50%, -50%); }
+/* Physics offset from useFloatingNetwork rides on its own wrapper so it composes
+   with the ambient pm-drift below rather than fighting it. --infl (0..1) is the
+   cursor influence reaching this card, faint at rest. */
+.pm-physics { position: relative; --infl: 0; will-change: transform; }
+.pm-physics::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 1px rgba(247, 143, 33, calc(var(--infl) * 0.55)),
+    0 0 calc(var(--infl) * 16px) rgba(247, 143, 33, calc(var(--infl) * 0.22));
+}
 .pm-orbit { animation: pm-drift var(--dur) ease-in-out var(--delay) infinite; }
 .pm-node:hover, .pm-node:focus-within { z-index: 3; }
 .pm-node:hover .pm-orbit, .pm-node:focus-within .pm-orbit { animation-play-state: paused; }
 .pm-card-float { position: relative; display: flex; height: 132px; align-items: center; padding: 26px 15px 16px; background: rgba(10, 15, 19, .9); }
-.pm-num { position: absolute; top: 11px; right: 14px; color: var(--orange); font-family: var(--display); font-size: 10px; font-weight: 500; letter-spacing: .14em; }
+.pm-num { position: absolute; top: 11px; right: 14px; color: var(--orange); font-family: var(--display); font-size: 10px; font-weight: 500; letter-spacing: .14em; text-shadow: 0 0 calc(var(--infl, 0) * 7px) rgba(247, 143, 33, calc(var(--infl, 0) * 0.6)); }
 .pm-title { display: block; font-size: 12px; line-height: 1.45; }
 
 @keyframes pm-drift {

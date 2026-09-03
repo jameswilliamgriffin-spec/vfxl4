@@ -4,6 +4,7 @@ import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import { MagneticCta } from '@/components/magnetic-cta';
 import { SectionRule } from '@/components/section-rule';
+import { useFloatingNetwork } from '@/hooks/use-floating-network';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -68,6 +69,15 @@ const links = LINKS.map(([from, to]) => {
   return { key: `${from}-${to}`, x1: a.x, y1: a.y, x2: b.x, y2: b.y };
 });
 
+// Index form for the floating-network physics: node positions in render order,
+// edges as pairs of those indices (matching the <line> render order above).
+const numToIndex = new Map(projects.map((p, i) => [p.number, i]));
+const nodePositions = projects.map((p) => ({ x: p.x, y: p.y }));
+const edgeIndexPairs: [number, number][] = LINKS.map(([from, to]) => [
+  numToIndex.get(from)!,
+  numToIndex.get(to)!,
+]);
+
 // Each card gets its own period, delay and radius so the field never pulses in sync.
 // Amplitudes stay <=5px: the tightest gap between two cards is 15.6px, so even two
 // cards orbiting straight at each other (max closure 10px) cannot touch.
@@ -110,9 +120,12 @@ function CardShell({
 export function ProjectMap() {
   const reduceMotion = useReducedMotion();
   const mapRef = useRef<HTMLDivElement>(null);
+  const fieldRef = useRef<HTMLUListElement>(null);
   // One in-view check drives every connector's draw-in; per-<line> whileInView is
   // unreliable because near-horizontal lines have a zero-height bounding box.
   const linksInView = useInView(mapRef, { once: true, amount: 0.15 });
+  // Connected floating physics: cursor pressure propagates through the edges.
+  useFloatingNetwork(fieldRef, nodePositions, edgeIndexPairs);
   const reveal = reduceMotion
     ? {}
     : {
@@ -148,7 +161,7 @@ export function ProjectMap() {
           <span className="pm-note">{introProject.note}</span>
         </CardShell>
 
-        <ul className="pm-field">
+        <ul className="pm-field" ref={fieldRef}>
           <span className="pm-lead pm-lead-start" aria-hidden="true" />
           <span className="pm-lead pm-lead-final" aria-hidden="true" />
           <svg className="pm-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -183,15 +196,17 @@ export function ProjectMap() {
                 } as React.CSSProperties
               }
             >
-              <div className="pm-orbit">
-                <CardShell
-                  href={project.href}
-                  className="pm-card pm-card-float"
-                  label={`PROJECT ${project.number}`}
-                >
-                  <span className="pm-num">{project.number}</span>
-                  <span className="pm-title">{project.title}</span>
-                </CardShell>
+              <div className="pm-physics">
+                <div className="pm-orbit">
+                  <CardShell
+                    href={project.href}
+                    className="pm-card pm-card-float"
+                    label={`PROJECT ${project.number}`}
+                  >
+                    <span className="pm-num">{project.number}</span>
+                    <span className="pm-title">{project.title}</span>
+                  </CardShell>
+                </div>
               </div>
             </li>
           ))}
