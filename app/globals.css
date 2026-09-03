@@ -162,7 +162,30 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 }
 
 .overview-heading h2 { grid-column: 1 / 11; align-self: center; margin: 74px 0 0; font-family: var(--display); font-size: clamp(78px, 10.4vw, 172px); font-weight: 300; letter-spacing: -.065em; line-height: .78; }
-.overview-heading h2 span { padding-left: 8.2vw; color: var(--viridian); }
+
+/* Scramble heading. .sh-line replaces the old <br>; .sh-line--accent replaces the
+   old bare <span>. Everything else is inherited from .overview-heading h2 above. */
+.overview-heading-title .sh-line { display: block; }
+.overview-heading-title .sh-line--accent { padding-left: 8.2vw; color: var(--viridian); }
+.overview-heading-title .sh-word { display: inline-block; white-space: nowrap; }
+.overview-heading-title .sh-char { display: inline-block; position: relative; }
+.overview-heading-title .sh-char.is-flash { animation: sh-flash 520ms ease; }
+/* 2px inspect-style box on the randomised characters. outline (not border) so the
+   heading doesn't shift as boxes come and go. */
+.overview-heading-title .sh-char.is-outline { outline: 2px solid var(--rule); outline-offset: 2px; }
+.overview-heading-title .sh-detail {
+  position: absolute;
+  left: 0;
+  bottom: -0.85em;
+  color: var(--meta);
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@keyframes sh-flash { 0% { opacity: 1; } 35% { opacity: 0.32; } 100% { opacity: 1; } }
 .overview-definition { grid-column: 6 / 10; align-self: end; margin: 54px 0 0; color: #cbd1cc; font-family: var(--display); font-size: clamp(18px, 1.45vw, 25px); font-weight: 300; line-height: 1.35; }
 .overview-heading aside { grid-column: 10 / 13; align-self: end; margin-left: 24px; padding: 22px 0 0 22px; border-top: 1px solid var(--orange); border-left: 1px solid var(--rule); }
 .overview-heading aside span { display: block; color: var(--orange); font-size: 15px; font-weight: 500; letter-spacing: .16em; }
@@ -255,7 +278,7 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
   .discipline-strip { height: 48px; }
   .overview-heading { min-height: 620px; display: block; padding: 62px 16px 54px; }
   .overview-heading h2 { margin-top: 72px; font-size: clamp(58px, 17vw, 92px); line-height: .82; }
-  .overview-heading h2 span { padding-left: 0; }
+  .overview-heading-title .sh-line--accent { padding-left: 0; }
   .overview-definition { width: 78%; margin: 76px 0 0 auto; font-size: 17px; }
   .overview-heading aside { width: 88%; margin: 44px 0 0; padding: 18px 0 0 16px; }
   .overview-heading aside span { font-size: 13px; }

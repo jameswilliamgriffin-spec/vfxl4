@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { ScrambleHeading } from '@/components/scramble-heading';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -94,7 +95,7 @@ export function ApprenticeshipOverview() {
 
       <motion.div className="overview-heading" {...reveal}>
         <TechLabel label="PROGRAMME OVERVIEW" />
-        <h2>BUILT AROUND<br /><span>THE WORK.</span></h2>
+        <ScrambleHeading lines={[{ text: 'BUILT AROUND' }, { text: 'THE WORK.', accent: true }]} />
         <p className="overview-definition">
           A Level 4 apprenticeship for people starting a career in visual effects — developing the craft, technical confidence and production behaviours needed to contribute to a professional VFX team.
         </p>
