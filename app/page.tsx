@@ -1,13 +1,15 @@
 import { Hero } from '@/components/hero';
 import { ApprenticeshipOverview } from '@/components/apprenticeship-overview';
-import { SiteHeader } from '@/components/site-header';
+import { ProjectMap } from '@/components/project-map';
+import { Training } from '@/components/training';
 
 export default function Home() {
   return (
     <main>
-      <SiteHeader />
       <Hero />
       <ApprenticeshipOverview />
+      <ProjectMap />
+      <Training />
     </main>
   );
 }

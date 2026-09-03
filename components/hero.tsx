@@ -1,8 +1,14 @@
 'use client';
 
+import { MeshGradient } from '@paper-design/shaders-react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+// Ink keeps most of the field dark so the plate and headline stay dominant. Creative
+// Alliance orange leads the colour, a deeper amber gives it falloff, and the Viridian
+// green puts both brands in the same wash.
+const shaderColors = ['#0a0f0c', '#f78f21', '#f9a83f', '#b85a14', '#8bcab8'];
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
@@ -17,6 +23,17 @@ export function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.1, ease }}
       >
+        <MeshGradient
+          className="hero-shader"
+          colors={shaderColors}
+          distortion={0.9}
+          swirl={0.7}
+          grainMixer={0.3}
+          grainOverlay={0.15}
+          speed={reduceMotion ? 0 : 0.8}
+          frame={reduceMotion ? 8000 : 0}
+          maxPixelCount={1600 * 900}
+        />
         <motion.img
           style={{ y: imageY }}
           src="/assets/academy-greenscreen-stage.png"

@@ -36,3 +36,8 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+tsconfig.tsbuildinfo
+
+# local build/authoring scaffolding (not part of the published site)
+/.openai/
+prompts.md
