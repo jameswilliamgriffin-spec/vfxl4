@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'motion/react';
+import { MagneticCta } from '@/components/magnetic-cta';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -124,10 +125,10 @@ export function ProjectMap() {
           A fixed start, a fixed finish, and ten workplace projects in between that can be taken in
           any order, as the right production opportunity comes up.
         </p>
-        <a className="pm-cta" href={PROJECTS_PAGE}>
+        <MagneticCta href={PROJECTS_PAGE}>
           Explore the projects
           <i aria-hidden="true">{'↗︎'}</i>
-        </a>
+        </MagneticCta>
       </motion.div>
 
       <div className="pm-map">

@@ -330,7 +330,9 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 .pm-header p { max-width: 560px; margin: 18px 0 0; color: #c4ccc6; font-family: var(--display); font-size: clamp(16px, 1.2vw, 20px); font-weight: 300; line-height: 1.5; }
 
 /* auto columns for the anchors keep the float field clear of them at every width */
-.pm-cta { display: inline-flex; align-items: center; gap: 12px; margin-top: 26px; padding: 15px 26px 15px 28px; border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--display); font-size: 15px; font-weight: 500; transition: background 260ms ease, transform 260ms ease, box-shadow 260ms ease; }
+.pm-cta { display: inline-flex; align-items: center; margin-top: 26px; padding: 15px 26px 15px 28px; border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--display); font-size: 15px; font-weight: 500; transition: background 260ms ease, transform 260ms ease, box-shadow 260ms ease; }
+/* Inner wrapper carries the magnetic transform so the pill hitbox stays put. */
+.pm-cta-inner { display: inline-flex; align-items: center; gap: 12px; }
 .pm-cta i { font-style: normal; font-size: 15px; transition: transform 260ms ease; }
 .pm-cta:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 14px 34px rgba(2, 6, 4, .5); }
 .pm-cta:hover i { transform: translate(3px, -3px); }
@@ -1291,4 +1293,41 @@ a.pm-card { cursor: pointer; }
   .site-footer-partner-brand-viridian { align-items: flex-start; flex-direction: column; gap: 16px; }
   .site-footer-viridian-logo { width: min(260px, 82%); }
   .site-footer-partner-body { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ---------- Homepage interaction layer ----------
+   A small shared vocabulary: orange = active/live, hairlines = progress,
+   monospace micro-labels = metadata, glow = active. Every moment reuses it. */
+
+/* Contextual cursor tag (component: cursor-field). Follows the pointer over
+   elements carrying data-cursor-label; never replaces the cursor. */
+.cursor-tag {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  padding: 4px 8px 3px;
+  border: 1px solid rgba(247, 143, 33, .42);
+  background: rgba(5, 8, 6, .82);
+  backdrop-filter: blur(6px);
+  color: var(--orange);
+  font-family: var(--body);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease;
+  will-change: transform;
+}
+.cursor-tag[data-on='true'] { opacity: 1; }
+
+/* Entry counter (component: counter) — sits inline in existing metadata, so it
+   only needs to hold width steady while the digits churn. */
+.counter { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-tag { display: none; }
 }

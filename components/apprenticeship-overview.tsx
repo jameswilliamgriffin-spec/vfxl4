@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { Counter } from '@/components/counter';
 import { ScrambleHeading } from '@/components/scramble-heading';
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -115,7 +116,7 @@ export function ApprenticeshipOverview() {
           </p>
         </motion.div>
         <div className="pathway-header">
-          <span>PATHWAY SELECTOR</span><span>03 PATHWAYS</span><span>HOVER / FOCUS TO INSPECT</span>
+          <span>PATHWAY SELECTOR</span><span><Counter value={3} pad={2} /> PATHWAYS</span><span>HOVER / FOCUS TO INSPECT</span>
         </div>
         <div className="pathway-list">
           {pathways.map((pathway, index) => (

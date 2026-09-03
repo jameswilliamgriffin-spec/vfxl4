@@ -2,6 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { Counter } from '@/components/counter';
+import { MagneticCta } from '@/components/magnetic-cta';
 import { PageHeroShader } from '@/components/page-hero-shader';
 import { trainingSections } from '@/lib/training-data';
 
@@ -40,17 +42,17 @@ export function Training() {
             teach you in the right order — the principles underneath the craft, and the practice you need
             before you meet them on a live shot.
           </p>
-          <a className="pm-cta" href={TRAINING_PAGE}>
+          <MagneticCta href={TRAINING_PAGE}>
             Explore the training
             <i aria-hidden="true">{'↗︎'}</i>
-          </a>
+          </MagneticCta>
         </motion.div>
       </div>
 
       <div className="training-system">
         <div className="training-header">
           <span>SESSION INDEX</span>
-          <span>08 SESSIONS</span>
+          <span><Counter value={8} pad={2} /> SESSIONS</span>
         </div>
 
         <div className="training-list">
