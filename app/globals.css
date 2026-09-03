@@ -184,10 +184,12 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 @media (max-width: 760px) {
   .grid-field { background-size: calc((100vw - 32px) / 4) 100%, 100% 72px; background-position: 16px 0, 0 0; }
   .site-header { height: 104px; grid-template-columns: 1fr; grid-template-rows: 51px 53px; }
-  .brand-lockup { padding: 0 16px; border-bottom: 1px solid var(--rule); }
+  /* Divider lives on the nav row's top edge, not the brand lockup's bottom: the
+     lockup is width:fit-content, so its border stopped short of the last nav item. */
+  .brand-lockup { padding: 0 16px; }
   .viridian-mark { width: 239px; height: auto; transform: translateY(-6px); }
   .creative-alliance-mark { width: 32px; height: 32px; }
-  .main-nav { border-left: 0; }
+  .main-nav { border-left: 0; border-top: 1px solid var(--rule); }
   .main-nav a { min-width: 0; flex: 1; padding: 0 4px; font-size: 9px; }
   .main-nav a:last-child { flex: 1.35; }
   .hero { min-height: max(540px, 82svh); padding-top: 104px; }
