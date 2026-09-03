@@ -108,8 +108,15 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 .hero-intro .collaboration-line { margin-top: 17px; color: var(--viridian); font-size: clamp(13px, .95vw, 17px); }
 
 .overview { position: relative; overflow: hidden; background-color: var(--ink); border-top: 1px solid var(--rule); }
-.discipline-strip { display: flex; min-width: max-content; align-items: center; justify-content: space-around; gap: 28px; height: 54px; padding: 0 24px; border-bottom: 1px solid var(--rule); color: #89948d; font-size: 8px; font-weight: 500; letter-spacing: var(--eyebrow-tracking); }
-.discipline-strip i { width: 5px; height: 5px; background: var(--orange); transform: rotate(45deg); opacity: .8; }
+/* Endless marquee. Two identical groups on the track; translateX(-50%) advances
+   by exactly one group, so the loop has no seam. Own opaque background so the
+   section's grid-field lines do not show through this strip. */
+.discipline-strip { display: flex; align-items: center; overflow: hidden; height: 54px; border-bottom: 1px solid var(--rule); background: var(--ink); color: #89948d; font-size: 8px; font-weight: 500; letter-spacing: var(--eyebrow-tracking); }
+.discipline-track { display: flex; width: max-content; will-change: transform; animation: discipline-scroll 55s linear infinite; }
+.discipline-group { display: flex; flex: none; align-items: center; gap: 28px; padding-right: 28px; }
+.discipline-item { display: inline-flex; flex: none; align-items: center; gap: 28px; white-space: nowrap; }
+.discipline-strip i { flex: none; width: 5px; height: 5px; background: var(--orange); transform: rotate(45deg); opacity: .8; }
+@keyframes discipline-scroll { to { transform: translateX(-50%); } }
 .overview-heading { position: relative; display: grid; min-height: 640px; grid-template-columns: repeat(12, 1fr); padding: 86px 24px 80px; border-bottom: 1px solid var(--rule); }
 .tech-label { grid-column: 1 / 13; display: flex; align-items: center; align-self: start; gap: 10px; color: var(--viridian); font-size: 8px; font-weight: 500; letter-spacing: var(--eyebrow-tracking); }
 
@@ -206,7 +213,7 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
   .hero-intro { max-width: 520px; margin-top: 26px; }
   .hero-intro p { font-size: 15px; }
   .hero-intro .collaboration-line { margin-top: 15px; font-size: 12px; }
-  .discipline-strip { justify-content: flex-start; overflow: hidden; height: 48px; padding: 0 16px; gap: 18px; }
+  .discipline-strip { height: 48px; }
   .overview-heading { min-height: 620px; display: block; padding: 62px 16px 54px; }
   .overview-heading h2 { margin-top: 72px; font-size: clamp(58px, 17vw, 92px); line-height: .82; }
   .overview-heading h2 span { padding-left: 0; }
@@ -232,6 +239,7 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .discipline-track { animation: none; transform: none; }
 }
 
 /* ---------- Project map ---------- */

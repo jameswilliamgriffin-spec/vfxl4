@@ -42,6 +42,33 @@ const pathways = [
   },
 ];
 
+// Decorative marquee under the hero. Rendered twice so the track can loop on a
+// translateX(-50%) with no visible seam.
+const disciplines = [
+  'VISUAL EFFECTS',
+  'COMPOSITING',
+  'CG + 3D',
+  'PIPELINE',
+  'PRODUCTION',
+  'EMERGING TECHNOLOGY',
+  'ROTOSCOPING',
+  'KEYING',
+  'MATCHMOVE',
+  'MATTE PAINTING',
+  'CAMERA TRACKING',
+  'MODELLING',
+  'LOOK DEVELOPMENT',
+  'LIGHTING',
+  'RENDERING',
+  'FX SIMULATION',
+  'PREVISUALISATION',
+  'VIRTUAL PRODUCTION',
+  'COLOUR PIPELINE',
+  'MOTION CAPTURE',
+  'PAINT + PREP',
+  'EDITORIAL',
+];
+
 export function ApprenticeshipOverview() {
   const reduceMotion = useReducedMotion();
   const [activePathway, setActivePathway] = useState(0);
@@ -51,12 +78,18 @@ export function ApprenticeshipOverview() {
   return (
     <section id="overview" className="overview grid-field">
       <div className="discipline-strip" aria-hidden="true">
-        <span>VISUAL EFFECTS</span><i />
-        <span>COMPOSITING</span><i />
-        <span>CG + 3D</span><i />
-        <span>PIPELINE</span><i />
-        <span>PRODUCTION</span><i />
-        <span>EMERGING TECHNOLOGY</span>
+        <div className="discipline-track">
+          {[0, 1].map((copy) => (
+            <div className="discipline-group" key={copy}>
+              {disciplines.map((label) => (
+                <span className="discipline-item" key={`${copy}-${label}`}>
+                  {label}
+                  <i />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
       <motion.div className="overview-heading" {...reveal}>
