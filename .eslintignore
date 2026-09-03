@@ -1,0 +1,3 @@
+# Generated shadcn component library. Linted upstream; not used in this first pass.
+components/ui/**
+hooks/use-mobile.ts
