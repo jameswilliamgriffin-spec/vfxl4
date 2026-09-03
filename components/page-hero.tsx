@@ -1,3 +1,4 @@
+import { HeroDotField } from '@/components/hero-dot-field';
 import { PageHeroShader } from '@/components/page-hero-shader';
 
 type PageHeroProps = {
@@ -15,6 +16,7 @@ export function PageHero({ title, copy, eyebrow, meta, className = '' }: PageHer
   return (
     <section className={`ksb-hero ${className}`.trim()}>
       <PageHeroShader />
+      <HeroDotField />
       <div className="ksb-hero-copy">
         {eyebrow && <span className="ksb-eyebrow">{eyebrow}</span>}
         <div className="page-hero-title-mask">

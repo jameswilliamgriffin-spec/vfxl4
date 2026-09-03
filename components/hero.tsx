@@ -2,6 +2,7 @@
 
 import { MeshGradient } from '@paper-design/shaders-react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { HeroDotField } from '@/components/hero-dot-field';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -41,6 +42,8 @@ export function Hero() {
         />
         <div className="image-grade" aria-hidden="true" />
       </motion.div>
+
+      <HeroDotField />
 
       <div className="hero-content">
         <motion.h1 className="hero-title">

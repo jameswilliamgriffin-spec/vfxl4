@@ -93,6 +93,12 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 .hero-shader { position: absolute; inset: 0; z-index: 0; }
 .hero-image-wrap > img { position: relative; z-index: 1; width: 100%; height: 112%; object-fit: cover; object-position: 58% center; filter: saturate(.62) contrast(1.06) brightness(.56); -webkit-mask-image: linear-gradient(90deg, transparent 2%, rgba(0, 0, 0, .3) 30%, rgba(0, 0, 0, .8) 54%, #000 72%); mask-image: linear-gradient(90deg, transparent 2%, rgba(0, 0, 0, .3) 30%, rgba(0, 0, 0, .8) 54%, #000 72%); }
 .image-grade { position: absolute; z-index: 2; inset: 0; background: linear-gradient(90deg, rgba(5, 8, 6, .5) 0%, rgba(5, 8, 6, .4) 47%, rgba(5, 8, 6, .18) 100%), linear-gradient(0deg, rgba(4, 11, 7, .64), rgba(10, 44, 27, .02) 60%); }
+
+/* Technical dot field — a single <canvas> filling the hero. Never intercepts
+   pointer events; sits above the plate/grade, below the copy. */
+.hero-dot-field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.hero > .hero-dot-field { z-index: 3; }
+
 .hero-content { position: relative; z-index: 4; width: min(1220px, 82vw); padding: clamp(94px, 9vh, 116px) 0 56px 7vw; }
 .hero-title { margin: 0; font-family: var(--display); font-size: clamp(54px, 7.2vw, 128px); font-weight: 300; letter-spacing: -.055em; line-height: .86; }
 .title-line { display: block; overflow: hidden; padding-bottom: .08em; }
