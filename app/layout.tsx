@@ -8,6 +8,7 @@ import '@fontsource/outfit/500.css';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('http://localhost:3000'),
   title: 'Visual Effects Level 4 | Viridian Academy',
   description:
     'The programme home for the Level 4 Junior Visual Effects apprenticeship — pathways, projects, training and end-point assessment.',
