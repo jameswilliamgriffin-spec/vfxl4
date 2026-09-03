@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Counter } from '@/components/counter';
 import { MagneticCta } from '@/components/magnetic-cta';
 import { PageHeroShader } from '@/components/page-hero-shader';
+import { SectionRule } from '@/components/section-rule';
 import { trainingSections } from '@/lib/training-data';
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -32,6 +33,7 @@ export function Training() {
 
   return (
     <section id="training" className="training">
+      <SectionRule />
       <div className="training-hero">
         <PageHeroShader colors={shaderColors} />
         <motion.div className="pm-header training-hero-copy" {...reveal}>

@@ -1348,3 +1348,44 @@ a.pm-card { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   .cursor-tag { display: none; }
 }
+
+/* Section-transition motion — a 1px orange line drawing across each section's top
+   edge as it enters (component: section-rule). Full-bleed via the 100vw trick;
+   body already clips overflow-x. Static (visible) for reduced motion. */
+.section-rule {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  height: 1px;
+  z-index: 6;
+  background: var(--orange);
+  transform: scaleX(1);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* Scroll-scrubbed frame / timecode readout (component: frame-counter). */
+.frame-counter {
+  position: fixed;
+  left: 16px;
+  bottom: 13px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(237, 241, 235, .32);
+  font-family: var(--body);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .13em;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.frame-counter i { flex: none; width: 4px; height: 4px; background: var(--orange); opacity: .7; transform: rotate(45deg); }
+.frame-counter [data-frame] { color: rgba(237, 241, 235, .5); }
+
+@media (max-width: 760px) {
+  .frame-counter { display: none; }
+}

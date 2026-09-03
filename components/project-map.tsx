@@ -1,7 +1,9 @@
 'use client';
 
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
+import { useRef } from 'react';
 import { MagneticCta } from '@/components/magnetic-cta';
+import { SectionRule } from '@/components/section-rule';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -91,20 +93,26 @@ const drift = [
 function CardShell({
   href,
   className,
+  label,
   children,
 }: {
   href?: string;
   className: string;
+  label?: string;
   children: React.ReactNode;
 }) {
   if (href) {
-    return <a className={className} href={href}>{children}</a>;
+    return <a className={className} href={href} data-cursor-label={label}>{children}</a>;
   }
-  return <div className={className}>{children}</div>;
+  return <div className={className} data-cursor-label={label}>{children}</div>;
 }
 
 export function ProjectMap() {
   const reduceMotion = useReducedMotion();
+  const mapRef = useRef<HTMLDivElement>(null);
+  // One in-view check drives every connector's draw-in; per-<line> whileInView is
+  // unreliable because near-horizontal lines have a zero-height bounding box.
+  const linksInView = useInView(mapRef, { once: true, amount: 0.15 });
   const reveal = reduceMotion
     ? {}
     : {
@@ -116,6 +124,7 @@ export function ProjectMap() {
 
   return (
     <section id="projects" className="project-map">
+      <SectionRule />
       <div className="pm-grid-overlay" aria-hidden="true" />
 
       <motion.div className="pm-header" {...reveal}>
@@ -131,7 +140,7 @@ export function ProjectMap() {
         </MagneticCta>
       </motion.div>
 
-      <div className="pm-map">
+      <div className="pm-map" ref={mapRef}>
         <CardShell href={introProject.href} className="pm-card pm-card-anchor pm-anchor-start">
           <span className="pm-tag">{introProject.tag}</span>
           <span className="pm-label">{introProject.label}</span>
@@ -143,8 +152,20 @@ export function ProjectMap() {
           <span className="pm-lead pm-lead-start" aria-hidden="true" />
           <span className="pm-lead pm-lead-final" aria-hidden="true" />
           <svg className="pm-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            {links.map((l) => (
-              <line key={l.key} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} vectorEffect="non-scaling-stroke" />
+            {links.map((l, i) => (
+              <motion.line
+                key={l.key}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                vectorEffect="non-scaling-stroke"
+                pathLength={1}
+                strokeDasharray={1}
+                initial={false}
+                animate={{ strokeDashoffset: reduceMotion || linksInView ? 0 : 1 }}
+                transition={{ duration: 0.85, delay: 0.15 + i * 0.055, ease }}
+              />
             ))}
           </svg>
           {projects.map((project, index) => (
@@ -163,7 +184,11 @@ export function ProjectMap() {
               }
             >
               <div className="pm-orbit">
-                <CardShell href={project.href} className="pm-card pm-card-float">
+                <CardShell
+                  href={project.href}
+                  className="pm-card pm-card-float"
+                  label={`PROJECT ${project.number}`}
+                >
                   <span className="pm-num">{project.number}</span>
                   <span className="pm-title">{project.title}</span>
                 </CardShell>

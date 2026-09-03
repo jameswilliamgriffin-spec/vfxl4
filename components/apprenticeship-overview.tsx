@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Counter } from '@/components/counter';
 import { ScrambleHeading } from '@/components/scramble-heading';
+import { SectionRule } from '@/components/section-rule';
 import { usePointerParallax } from '@/hooks/use-pointer-parallax';
 
 const CA_COORD = '52.4862° N / 1.8904° W';
@@ -99,6 +100,7 @@ export function ApprenticeshipOverview() {
 
   return (
     <section id="overview" className="overview grid-field">
+      <SectionRule />
       <div className="discipline-strip" aria-hidden="true">
         <div className="discipline-track">
           {[0, 1].map((copy) => (
