@@ -98,7 +98,7 @@ export function ApprenticeshipOverview() {
               <span className="pathway-number">{pathway.number}</span>
               <span className="pathway-name">{pathway.title}<strong>{pathway.specialism}</strong></span>
               <span className="pathway-tags">{pathway.tags.map((tag) => <i key={tag}>{tag}</i>)}</span>
-              <span className="pathway-arrow" aria-hidden="true">↗</span>
+              <span className="pathway-arrow" aria-hidden="true">{'↗︎'}</span>
             </motion.button>
           ))}
         </div>

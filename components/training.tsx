@@ -42,7 +42,7 @@ export function Training() {
           </p>
           <a className="pm-cta" href={TRAINING_PAGE}>
             Explore the training
-            <i aria-hidden="true">↗</i>
+            <i aria-hidden="true">{'↗︎'}</i>
           </a>
         </motion.div>
       </div>
@@ -66,7 +66,7 @@ export function Training() {
             >
               <span className="training-number">{session.number}</span>
               <span className="training-title">{session.title}</span>
-              <span className="training-arrow" aria-hidden="true">↗</span>
+              <span className="training-arrow" aria-hidden="true">{'↗︎'}</span>
             </button>
           ))}
         </div>

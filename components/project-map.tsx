@@ -126,7 +126,7 @@ export function ProjectMap() {
         </p>
         <a className="pm-cta" href={PROJECTS_PAGE}>
           Explore the projects
-          <i aria-hidden="true">↗</i>
+          <i aria-hidden="true">{'↗︎'}</i>
         </a>
       </motion.div>
 

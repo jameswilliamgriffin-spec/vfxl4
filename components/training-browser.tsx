@@ -79,7 +79,7 @@ export function TrainingBrowser() {
                   </strong>
                 </span>
                 <span className="pathway-arrow" aria-hidden="true">
-                  ↗
+                  {'↗︎'}
                 </span>
               </motion.button>
             );
