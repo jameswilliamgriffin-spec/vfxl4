@@ -1,9 +1,12 @@
 'use client';
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Counter } from '@/components/counter';
 import { ScrambleHeading } from '@/components/scramble-heading';
+import { usePointerParallax } from '@/hooks/use-pointer-parallax';
+
+const CA_COORD = '52.4862° N / 1.8904° W';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -77,6 +80,23 @@ export function ApprenticeshipOverview() {
   const active = pathways[activePathway];
   const reveal = reduceMotion ? {} : { initial: { opacity: 0, y: 42 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.18 }, transition: { duration: 0.8, ease } };
 
+  // Cursor-position parallax on the pathway frame, plus a live coordinate readout
+  // (the CREATIVE ALLIANCE line drifts with the cursor, snapping back on leave).
+  const coordRef = useRef<HTMLSpanElement>(null);
+  const { frameRef, targetRef } = usePointerParallax<HTMLDivElement, HTMLDivElement>({
+    maxX: 6,
+    maxY: 4,
+    onMove: (nx, ny) => {
+      const el = coordRef.current;
+      if (el) {
+        el.textContent = `${(52.4862 + ny * 0.16).toFixed(4)}° N / ${(1.8904 - nx * 0.16).toFixed(4)}° W`;
+      }
+    },
+    onLeave: () => {
+      if (coordRef.current) coordRef.current.textContent = CA_COORD;
+    },
+  });
+
   return (
     <section id="overview" className="overview grid-field">
       <div className="discipline-strip" aria-hidden="true">
@@ -119,12 +139,30 @@ export function ApprenticeshipOverview() {
           <span>PATHWAY SELECTOR</span><span><Counter value={3} pad={2} /> PATHWAYS</span><span>HOVER / FOCUS TO INSPECT</span>
         </div>
         <div className="pathway-list">
+          <motion.div
+            className="pathway-rail"
+            aria-hidden="true"
+            {...(reduceMotion
+              ? {}
+              : {
+                  initial: { scaleY: 0 },
+                  whileInView: { scaleY: 1 },
+                  viewport: { once: true, amount: 0.4 },
+                  transition: { duration: 0.7, ease },
+                })}
+          >
+            <span
+              className="pathway-rail-head"
+              style={{ '--rail-i': activePathway } as React.CSSProperties}
+            />
+          </motion.div>
           {pathways.map((pathway, index) => (
             <motion.button
               type="button"
               key={pathway.number}
               className={activePathway === index ? 'is-active' : ''}
               aria-pressed={activePathway === index}
+              data-cursor-label="VIEW PATHWAY →"
               onMouseEnter={() => setActivePathway(index)}
               onFocus={() => setActivePathway(index)}
               onClick={() => setActivePathway(index)}
@@ -138,23 +176,38 @@ export function ApprenticeshipOverview() {
           ))}
         </div>
         <div className="pathway-visual">
-          <div className="pathway-frame">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={active.image}
-                src={active.image}
-                alt={active.alt}
-                initial={reduceMotion ? false : { opacity: 0, scale: 1.05, clipPath: 'inset(0 0 100% 0)' }}
-                animate={{ opacity: 1, scale: 1, clipPath: 'inset(0 0 0% 0)' }}
-                exit={reduceMotion ? {} : { opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
-                transition={{ duration: 0.55, ease }}
-              />
-            </AnimatePresence>
+          <div className="pathway-frame" ref={frameRef} data-cursor-label="INSPECT">
+            <div className="pathway-frame-inner" ref={targetRef}>
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={active.image}
+                  src={active.image}
+                  alt={active.alt}
+                  initial={reduceMotion ? false : { opacity: 0, scale: 1.05, clipPath: 'inset(0 0 100% 0)' }}
+                  animate={{ opacity: 1, scale: 1, clipPath: 'inset(0 0 0% 0)' }}
+                  exit={reduceMotion ? {} : { opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                  transition={{ duration: 0.55, ease }}
+                />
+              </AnimatePresence>
+            </div>
             <div className="pathway-grade" aria-hidden="true" />
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={active.number}
+                className="pathway-ghost"
+                aria-hidden="true"
+                initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                animate={{ opacity: 0.1, y: 0 }}
+                exit={reduceMotion ? {} : { opacity: 0, y: -24 }}
+                transition={{ duration: 0.5, ease }}
+              >
+                {active.number}
+              </motion.span>
+            </AnimatePresence>
             <div className="visual-index"><span>PATHWAY</span><strong>{active.number}</strong><i /></div>
             <div className="visual-coordinates" aria-hidden="true">
               <span><i>VIRIDIAN FX</i>53.9591° N&nbsp;&nbsp;/&nbsp;&nbsp;1.0815° W</span>
-              <span><i>CREATIVE ALLIANCE</i>52.4862° N&nbsp;&nbsp;/&nbsp;&nbsp;1.8904° W</span>
+              <span><i>CREATIVE ALLIANCE</i><span ref={coordRef}>{CA_COORD}</span></span>
             </div>
             <div className="frame-corners" aria-hidden="true"><i /><i /><i /><i /></div>
           </div>
