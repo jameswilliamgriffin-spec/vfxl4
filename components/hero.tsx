@@ -27,7 +27,7 @@ export function Hero() {
 
       <div className="hero-content">
         <motion.h1 className="hero-title">
-          {['junior', 'visual effects', 'level 4.'].map((line, index) => (
+          {['Junior', 'Visual Effects', 'Level 4.'].map((line, index) => (
             <span className="title-line" key={line}>
               <motion.span
                 initial={reduceMotion ? false : { y: '110%' }}

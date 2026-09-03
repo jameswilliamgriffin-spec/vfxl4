@@ -15,9 +15,8 @@ export function SiteHeader() {
   return (
     <motion.header className="site-header" initial={reduceMotion ? false : { y: -72 }} animate={{ y: 0 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
       <a className="brand-lockup" href="#top" aria-label="Visual Effects Level 4 home">
-        <Image className="viridian-mark" src="/assets/viridian-academy-logo.png" width={148} height={20} alt="Viridian Academy" priority />
-        <span className="brand-join" aria-hidden="true">×</span>
-        <Image className="creative-alliance-mark" src="/assets/creative-alliance.svg" width={30} height={30} alt="Creative Alliance" />
+        <Image className="creative-alliance-mark" src="/assets/creative-alliance.svg" width={38} height={38} alt="Creative Alliance" priority />
+        <Image className="viridian-mark" src="/assets/viridian-academy-logo.png" width={168} height={23} alt="Viridian Academy" priority />
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         {navItems.map((item) => (

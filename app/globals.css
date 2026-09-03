@@ -31,10 +31,9 @@ a:focus-visible { outline: 1px solid var(--orange); outline-offset: 5px; }
   grid-template-columns: 1fr auto; align-items: stretch;
   border-bottom: 1px solid var(--rule); background: rgba(5, 8, 6, 0.82); backdrop-filter: blur(14px);
 }
-.brand-lockup { display: flex; align-items: center; gap: 12px; width: fit-content; padding: 0 24px; }
-.viridian-mark { width: 148px; height: auto; object-fit: contain; }
-.brand-join { color: #69736d; font-family: var(--display); font-size: 13px; font-weight: 300; }
-.creative-alliance-mark { width: 30px; height: 30px; }
+.brand-lockup { display: flex; align-items: center; gap: 17px; width: fit-content; padding: 0 24px; }
+.viridian-mark { width: 168px; height: auto; object-fit: contain; }
+.creative-alliance-mark { width: 38px; height: 38px; }
 .main-nav { display: flex; height: 100%; border-left: 1px solid var(--rule); }
 .main-nav a { position: relative; display: flex; min-width: 112px; align-items: center; justify-content: center; border-right: 1px solid var(--rule); font-family: var(--display); font-size: 11px; font-weight: 400; letter-spacing: .13em; transition: color 220ms ease, background 220ms ease; }
 .main-nav a::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; content: ''; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 260ms ease; }
@@ -144,8 +143,8 @@ a:focus-visible { outline: 1px solid var(--orange); outline-offset: 5px; }
   .grid-field { background-size: calc((100vw - 32px) / 4) 100%, 100% 72px; background-position: 16px 0, 0 0; }
   .site-header { height: 104px; grid-template-columns: 1fr; grid-template-rows: 51px 53px; }
   .brand-lockup { padding: 0 16px; border-bottom: 1px solid var(--rule); }
-  .viridian-mark { width: 118px; }
-  .creative-alliance-mark { width: 26px; height: 26px; }
+  .viridian-mark { width: 134px; }
+  .creative-alliance-mark { width: 32px; height: 32px; }
   .main-nav { border-left: 0; }
   .main-nav a { min-width: 0; flex: 1; font-size: 9px; }
   .hero { min-height: max(720px, 100svh); padding-top: 104px; }
