@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useRef, useState } from 'react';
-import { trainingSections } from '@/lib/training-data';
+import { Counter } from '@/components/counter';
+import { SESSION_LENGTH, trainingSessions } from '@/lib/training-data';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -10,7 +11,7 @@ export function TrainingBrowser() {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const active = trainingSections[activeIndex];
+  const active = trainingSessions[activeIndex];
 
   function onKeyDown(event: React.KeyboardEvent, index: number) {
     const destinations: Record<string, number> = {
@@ -19,44 +20,44 @@ export function TrainingBrowser() {
       ArrowUp: index - 1,
       ArrowLeft: index - 1,
       Home: 0,
-      End: trainingSections.length - 1,
+      End: trainingSessions.length - 1,
     };
     const requested = destinations[event.key];
     if (requested === undefined) return;
 
     event.preventDefault();
-    const next = (requested + trainingSections.length) % trainingSections.length;
+    const next = (requested + trainingSessions.length) % trainingSessions.length;
     setActiveIndex(next);
     buttonRefs.current[next]?.focus();
   }
 
   return (
-    <section className="training-page-content" aria-labelledby="training-sections-heading">
-      <h2 id="training-sections-heading" className="sr-only">
-        Training sections
+    <section className="training-page-content" aria-labelledby="training-sessions-heading">
+      <h2 id="training-sessions-heading" className="sr-only">
+        Training sessions
       </h2>
       <div className="pathway-system training-page-system">
         <div className="pathway-header">
-          <span>TRAINING SELECTOR</span>
-          <span>08 SECTIONS</span>
+          <span>SESSION SELECTOR</span>
+          <span><Counter value={8} pad={2} /> SESSIONS</span>
           <span>HOVER / FOCUS TO INSPECT</span>
         </div>
 
-        <div className="pathway-list training-page-list" role="tablist" aria-label="Training sections" aria-orientation="vertical">
-          {trainingSections.map((section, index) => {
+        <div className="pathway-list training-page-list" role="tablist" aria-label="Training sessions" aria-orientation="vertical">
+          {trainingSessions.map((session, index) => {
             const isActive = activeIndex === index;
             return (
               <motion.button
                 ref={(node) => {
                   buttonRefs.current[index] = node;
                 }}
-                id={`training-tab-${section.number}`}
+                id={`training-tab-${session.number}`}
                 type="button"
                 role="tab"
                 aria-selected={isActive}
                 aria-controls="training-section-panel"
                 tabIndex={isActive ? 0 : -1}
-                key={section.number}
+                key={session.number}
                 className={isActive ? 'is-active' : ''}
                 onMouseEnter={() => setActiveIndex(index)}
                 onFocus={() => setActiveIndex(index)}
@@ -71,12 +72,10 @@ export function TrainingBrowser() {
                       transition: { duration: 0.55, delay: index * 0.045, ease },
                     })}
               >
-                <span className="pathway-number">{section.number}</span>
+                <span className="pathway-number">{session.number}</span>
                 <span className="pathway-name">
-                  {section.title}
-                  <strong>
-                    {section.scope === 'CORE' ? 'CORE / ALL PATHWAYS' : 'PATHWAY DEVELOPMENT'}
-                  </strong>
+                  {session.title}
+                  <strong>{session.subtitle}</strong>
                 </span>
                 <span className="pathway-arrow" aria-hidden="true">
                   {'↗︎'}
@@ -115,7 +114,7 @@ export function TrainingBrowser() {
             </AnimatePresence>
             <div className="pathway-grade" aria-hidden="true" />
             <div className="visual-index">
-              <span>TRAINING</span>
+              <span>SESSION</span>
               <strong>{active.number}</strong>
               <i />
             </div>
@@ -145,16 +144,19 @@ export function TrainingBrowser() {
                 transition={{ duration: 0.4, ease }}
               >
                 <span className="detail-eyebrow">
-                  TRAINING {active.number} /{' '}
-                  {active.scope === 'CORE' ? 'CORE' : 'PATHWAY'}
+                  SESSION {active.number} · CORE KNOWLEDGE · {SESSION_LENGTH}
                 </span>
                 <h3>{active.title}</h3>
+                <span className="training-sub">{active.subtitle}</span>
                 <p>{active.summary}</p>
-                <ul className="training-page-covers">
-                  {active.covers.map((item) => (
-                    <li key={item}>{item}</li>
+                <div className="training-ksb" aria-label="Criteria covered">
+                  {active.knowledge.map((code) => (
+                    <span key={code} className="duty-chip duty-chip-K">{code}</span>
                   ))}
-                </ul>
+                  {active.skills.map((code) => (
+                    <span key={code} className="duty-chip duty-chip-S">{code}</span>
+                  ))}
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>

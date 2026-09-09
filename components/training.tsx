@@ -6,7 +6,7 @@ import { Counter } from '@/components/counter';
 import { MagneticCta } from '@/components/magnetic-cta';
 import { PageHeroShader } from '@/components/page-hero-shader';
 import { SectionRule } from '@/components/section-rule';
-import { trainingSections } from '@/lib/training-data';
+import { SESSION_LENGTH, trainingSessions } from '@/lib/training-data';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -21,7 +21,7 @@ export const TRAINING_PAGE = '/training';
 export function Training() {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
-  const active = trainingSections[activeIndex];
+  const active = trainingSessions[activeIndex];
   const reveal = reduceMotion
     ? {}
     : {
@@ -40,9 +40,9 @@ export function Training() {
           <span className="pm-eyebrow">TRAINING</span>
           <h2>On programme training.</h2>
           <p>
-            Alongside the work itself, taught sessions cover the things a production cannot be relied on to
-            teach you in the right order — the principles underneath the craft, and the practice you need
-            before you meet them on a live shot.
+            Eight taught sessions cover the core knowledge a production cannot be relied on to teach you in
+            the right order — the principles under the craft, mapped to the standard you are assessed
+            against, taught alongside your workplace projects.
           </p>
           <MagneticCta href={TRAINING_PAGE}>
             Explore the training
@@ -58,7 +58,7 @@ export function Training() {
         </div>
 
         <div className="training-list">
-          {trainingSections.map((session, index) => (
+          {trainingSessions.map((session, index) => (
             <button
               type="button"
               key={session.number}
@@ -84,16 +84,18 @@ export function Training() {
               exit={reduceMotion ? {} : { opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease }}
             >
-              <span className="training-detail-scope">
-                {active.scope === 'CORE' ? 'CORE / ALL PATHWAYS' : 'VARIES BY PATHWAY'}
-              </span>
+              <span className="training-detail-scope">CORE KNOWLEDGE · {SESSION_LENGTH}</span>
               <h3>{active.title}</h3>
+              <span className="training-sub">{active.subtitle}</span>
               <p>{active.summary}</p>
-              <ul className="training-covers">
-                {active.covers.map((item) => (
-                  <li key={item}>{item}</li>
+              <div className="training-ksb" aria-label="Criteria covered">
+                {active.knowledge.map((code) => (
+                  <span key={code} className="duty-chip duty-chip-K">{code}</span>
                 ))}
-              </ul>
+                {active.skills.map((code) => (
+                  <span key={code} className="duty-chip duty-chip-S">{code}</span>
+                ))}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>

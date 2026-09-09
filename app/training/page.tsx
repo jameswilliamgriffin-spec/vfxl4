@@ -5,7 +5,7 @@ import { TrainingBrowser } from '@/components/training-browser';
 export const metadata: Metadata = {
   title: 'Training | Visual Effects Level 4',
   description:
-    'Explore the eight areas of taught development within the Level 4 Junior Visual Effects apprenticeship.',
+    'The eight core-knowledge training sessions taught within the Level 4 Junior Visual Effects apprenticeship, each mapped to the occupational standard.',
 };
 
 export default function TrainingPage() {
@@ -14,8 +14,8 @@ export default function TrainingPage() {
       <PageHero
         eyebrow="ON-PROGRAMME DEVELOPMENT"
         title="Training"
-        copy={<>Structured teaching gives you the principles, technical context and protected practice that live production cannot always provide in the right order. It works alongside your workplace projects to build confident, transferable VFX practice.</>}
-        meta="08 TRAINING SECTIONS · CORE AND PATHWAY DEVELOPMENT"
+        copy={<>Eight taught sessions give you the principles, industry context and protected practice that live production cannot always provide in the right order — the core knowledge under the craft, mapped to the occupational standard you are assessed against. They run alongside your workplace projects.</>}
+        meta="08 SESSIONS · 2.5 HOURS EACH · CORE KNOWLEDGE"
       />
       <TrainingBrowser />
     </main>
