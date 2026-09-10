@@ -52,10 +52,12 @@ export function FrameCounter() {
 
   return (
     <div ref={rootRef} className="frame-counter" aria-hidden="true">
+      <span className="fc-rec" />
+      <span className="fc-label">TC</span>
       <span data-tc>00:00:00</span>
       <i />
       <span>
-        FRAME <span data-frame>00000</span>
+        <span className="fc-label">FRAME</span> <span data-frame>00000</span>
       </span>
     </div>
   );

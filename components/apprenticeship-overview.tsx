@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { Counter } from '@/components/counter';
 import { ScrambleHeading } from '@/components/scramble-heading';
 import { ScrambleText } from '@/components/scramble-text';
+import { SectionEnd } from '@/components/section-end';
 import { SectionRule } from '@/components/section-rule';
 import { usePointerParallax } from '@/hooks/use-pointer-parallax';
 
@@ -345,9 +346,7 @@ export function ApprenticeshipOverview() {
         </div>
       </div>
 
-      <div className="overview-end">
-        <span>END / FIRST-PASS SCOPE</span>
-      </div>
+      <SectionEnd seq="02" label="Programme · Pathways" />
     </section>
   );
 }
