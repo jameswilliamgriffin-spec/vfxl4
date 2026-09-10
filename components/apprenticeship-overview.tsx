@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Counter } from '@/components/counter';
 import { ScrambleHeading } from '@/components/scramble-heading';
+import { ScrambleText } from '@/components/scramble-text';
 import { SectionRule } from '@/components/section-rule';
 import { usePointerParallax } from '@/hooks/use-pointer-parallax';
 
@@ -239,5 +240,5 @@ export function ApprenticeshipOverview() {
 }
 
 function TechLabel({ label }: { label: string }) {
-  return <div className="tech-label"><i /><span>{label}</span></div>;
+  return <div className="tech-label"><i /><ScrambleText text={label} /></div>;
 }

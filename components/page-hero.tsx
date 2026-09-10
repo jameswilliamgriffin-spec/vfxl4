@@ -1,5 +1,6 @@
 import { HeroDotField } from '@/components/hero-dot-field';
 import { PageHeroShader } from '@/components/page-hero-shader';
+import { ScrambleText } from '@/components/scramble-text';
 
 type PageHeroProps = {
   title: string;
@@ -18,7 +19,7 @@ export function PageHero({ title, copy, eyebrow, meta, className = '' }: PageHer
       <PageHeroShader />
       <HeroDotField />
       <div className="ksb-hero-copy">
-        {eyebrow && <span className="ksb-eyebrow">{eyebrow}</span>}
+        {eyebrow && <ScrambleText className="ksb-eyebrow" text={eyebrow} />}
         <div className="page-hero-title-mask">
           <h1>{title}</h1>
         </div>

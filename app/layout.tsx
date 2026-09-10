@@ -6,6 +6,7 @@ import '@fontsource/outfit/300.css';
 import '@fontsource/outfit/400.css';
 import '@fontsource/outfit/500.css';
 import { PageTransition } from '@/components/page-transition';
+import { SiteIntro } from '@/components/site-intro';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import './globals.css';
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <SiteIntro />
         <SiteHeader />
         <PageTransition>{children}</PageTransition>
         <SiteFooter />

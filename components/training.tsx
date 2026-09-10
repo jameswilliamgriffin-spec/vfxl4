@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Counter } from '@/components/counter';
 import { MagneticCta } from '@/components/magnetic-cta';
 import { PageHeroShader } from '@/components/page-hero-shader';
+import { ScrambleText } from '@/components/scramble-text';
 import { SectionRule } from '@/components/section-rule';
 import { SESSION_LENGTH, trainingSessions } from '@/lib/training-data';
 
@@ -37,7 +38,7 @@ export function Training() {
       <div className="training-hero">
         <PageHeroShader colors={shaderColors} />
         <motion.div className="pm-header training-hero-copy" {...reveal}>
-          <span className="pm-eyebrow">TRAINING</span>
+          <ScrambleText className="pm-eyebrow" text="TRAINING" />
           <h2>On programme training.</h2>
           <p>
             Eight taught sessions cover the core knowledge a production cannot be relied on to teach you in

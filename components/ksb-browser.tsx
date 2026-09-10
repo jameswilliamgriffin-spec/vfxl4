@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useRef, useState } from 'react';
 import { ScrollReveal } from '@/components/motion-primitives';
+import { ScrambleText } from '@/components/scramble-text';
 import {
   byType,
   coreDuties,
@@ -257,7 +258,7 @@ export function KsbBrowser() {
 
       <section id="core-ksbs" className="ksb-section" aria-labelledby="core-ksbs-heading">
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">EVERY APPRENTICE</span>
+          <ScrambleText className="ksb-eyebrow" text="EVERY APPRENTICE" />
           <h2 id="core-ksbs-heading">Core KSBs</h2>
           <p>
             These {coreKsbs.length} apply to you whichever pathway you take. They cover how VFX work moves
@@ -270,7 +271,7 @@ export function KsbBrowser() {
 
       <section id="pathway-ksbs" className="ksb-section" aria-labelledby="pathway-ksbs-heading">
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">YOUR SPECIALISM</span>
+          <ScrambleText className="ksb-eyebrow" text="YOUR SPECIALISM" />
           <h2 id="pathway-ksbs-heading">Pathway KSBs</h2>
           <p>
             These sit <strong>on top of</strong> the core above, and they are the ones that change with your
@@ -328,7 +329,7 @@ export function KsbBrowser() {
         aria-labelledby="duties-heading"
       >
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">WHAT THE ROLE DOES</span>
+          <ScrambleText className="ksb-eyebrow" text="WHAT THE ROLE DOES" />
           <h2 id="duties-heading">Occupational duties</h2>
           <p>
             The standard also sets out {duties.length} duties — the actual jobs of work the role is expected

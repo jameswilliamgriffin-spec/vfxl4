@@ -3,6 +3,7 @@
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import { MagneticCta } from '@/components/magnetic-cta';
+import { ScrambleText } from '@/components/scramble-text';
 import { SectionRule } from '@/components/section-rule';
 import { useFloatingNetwork } from '@/hooks/use-floating-network';
 
@@ -141,7 +142,7 @@ export function ProjectMap() {
       <div className="pm-grid-overlay" aria-hidden="true" />
 
       <motion.div className="pm-header" {...reveal}>
-        <span className="pm-eyebrow">PROJECTS</span>
+        <ScrambleText className="pm-eyebrow" text="PROJECTS" />
         <h2>Explore the projects.</h2>
         <p>
           A fixed start, a fixed finish, and ten workplace projects in between that can be taken in

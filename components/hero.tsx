@@ -2,9 +2,12 @@
 
 import { MeshGradient } from '@paper-design/shaders-react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { useEffect, useState } from 'react';
 import { HeroDotField } from '@/components/hero-dot-field';
+import { isIntroDone, subscribeIntro } from '@/lib/intro-state';
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const ACADEMY_URL = 'https://viridianlab.co.uk/academy/';
 
 // Ink keeps most of the field dark so the plate and headline stay dominant. Creative
 // Alliance orange leads the colour, a deeper amber gives it falloff, and the Viridian
@@ -15,6 +18,24 @@ export function Hero() {
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const imageY = useTransform(scrollYProgress, [0, 0.32], ['0%', reduceMotion ? '0%' : '10%']);
+
+  // Hold the entrance until the opening overlay has lifted, so the title lines
+  // don't rise behind it. Reduced motion (and any missed signal) settles at once.
+  const [entered, setEntered] = useState(() => isIntroDone());
+  useEffect(() => {
+    if (reduceMotion) {
+      setEntered(true);
+      return;
+    }
+    const unsubscribe = subscribeIntro(() => setEntered(true));
+    const safety = window.setTimeout(() => setEntered(true), 4200);
+    return () => {
+      unsubscribe();
+      window.clearTimeout(safety);
+    };
+  }, [reduceMotion]);
+
+  const go = reduceMotion || entered;
 
   return (
     <section id="top" className="hero">
@@ -51,8 +72,8 @@ export function Hero() {
             <span className="title-line" key={line}>
               <motion.span
                 initial={reduceMotion ? false : { y: '110%' }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.85, delay: 0.12 + index * 0.1, ease }}
+                animate={{ y: go ? 0 : '110%' }}
+                transition={{ duration: 0.85, delay: go ? 0.12 + index * 0.1 : 0, ease }}
               >
                 {line}
               </motion.span>
@@ -63,8 +84,8 @@ export function Hero() {
         <motion.div
           className="hero-intro"
           initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.62, ease }}
+          animate={{ opacity: go ? 1 : 0, y: go ? 0 : 18 }}
+          transition={{ duration: 0.7, delay: go ? 0.5 : 0, ease }}
         >
           <p>
             An 18-month production-led programme for emerging artists and technical talent —
@@ -73,6 +94,15 @@ export function Hero() {
           <p className="collaboration-line">
             A collaboration between Creative Alliance &amp; Viridian FX.
           </p>
+          <a
+            className="hero-academy-link"
+            href={ACADEMY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit the Viridian Academy
+            <i aria-hidden="true">{'↗︎'}</i>
+          </a>
         </motion.div>
       </div>
     </section>

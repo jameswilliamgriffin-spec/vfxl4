@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { PageHero } from '@/components/page-hero';
 import { RevealArticle, RevealListItem, ScrollReveal } from '@/components/motion-primitives';
+import { ScrambleText } from '@/components/scramble-text';
 import {
   EPA_REF,
   epaMethods,
@@ -43,7 +44,7 @@ export default function EpaPage() {
         aria-labelledby="how-it-works-heading"
       >
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">THE SHAPE OF IT</span>
+          <ScrambleText className="ksb-eyebrow" text="THE SHAPE OF IT" />
           <h2 id="how-it-works-heading">How it works</h2>
           <p>
             You spend the bulk of the apprenticeship on-programme, building the
@@ -72,7 +73,7 @@ export default function EpaPage() {
         aria-labelledby="methods-heading"
       >
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">WHAT YOU ARE ASSESSED ON</span>
+          <ScrambleText className="ksb-eyebrow" text="WHAT YOU ARE ASSESSED ON" />
           <h2 id="methods-heading">The two assessment methods</h2>
           <p>
             Every apprentice completes both. They are graded separately by an
@@ -123,7 +124,7 @@ export default function EpaPage() {
         aria-labelledby="grading-heading"
       >
         <ScrollReveal className="ksb-section-head">
-          <span className="ksb-eyebrow">HOW THE RESULT IS DECIDED</span>
+          <ScrambleText className="ksb-eyebrow" text="HOW THE RESULT IS DECIDED" />
           <h2 id="grading-heading">Grading</h2>
           <p>
             Each method is graded fail, pass or distinction. Those two results
