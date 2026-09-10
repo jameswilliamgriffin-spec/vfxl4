@@ -17,21 +17,20 @@ export function TrainingBrowser() {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   // Click peels the image away and reveals the full breakdown. Clicking the
-  // active session again collapses it; clicking another switches and stays open.
-  // Hovering a different session drops back to the preview (see `preview`).
+  // active session again collapses it; clicking another switches straight to its
+  // breakdown.
   const [expanded, setExpanded] = useState(false);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const panelRef = useRef<HTMLDivElement>(null);
   const active = trainingSessions[activeIndex];
 
-  // Hover / focus previews a session — its image and overview. Moving onto a
-  // different session also drops the expanded breakdown, so you are back to the
-  // preview until you click again. Hovering the session that is already open
-  // leaves it open.
+  // Hover / focus previews a session — its image and overview — but only while
+  // nothing is open. Once a session is expanded, hover on the other rows is
+  // ignored, so moving the cursor across the list toward the panel can't clip
+  // another session. Switch by clicking another row; click the open row to close.
   function preview(index: number) {
-    if (index === activeIndex) return;
+    if (expanded) return;
     setActiveIndex(index);
-    setExpanded(false);
   }
 
   // On mobile the panel sits below the full list, so bring it into view on open.
