@@ -3,15 +3,54 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Counter } from '@/components/counter';
+import { ksbs } from '@/lib/ksb-data';
 import { SESSION_LENGTH, trainingSessions } from '@/lib/training-data';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+// Full official ST1325 wording, keyed by code, for the expanded criteria list.
+const ksbById = new Map(ksbs.map((k) => [k.id, k]));
+const fullText = (codes: string[]) =>
+  codes.map((id) => ({ id, text: ksbById.get(id)?.text ?? '' }));
+
 export function TrainingBrowser() {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  // Click peels the image away and reveals the full breakdown. Clicking the
+  // active session again collapses it; clicking another switches and stays open.
+  const [expanded, setExpanded] = useState(false);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const panelRef = useRef<HTMLDivElement>(null);
   const active = trainingSessions[activeIndex];
+
+  // Hover / focus only previews while collapsed.
+  function preview(index: number) {
+    if (!expanded) setActiveIndex(index);
+  }
+
+  // On mobile the panel sits below the full list, so bring it into view on open.
+  function revealPanel() {
+    if (typeof window === 'undefined' || window.innerWidth > 760) return;
+    requestAnimationFrame(() =>
+      panelRef.current?.scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'start',
+      }),
+    );
+  }
+
+  function selectOrToggle(index: number) {
+    if (index === activeIndex) {
+      setExpanded((v) => {
+        if (!v) revealPanel();
+        return !v;
+      });
+    } else {
+      setActiveIndex(index);
+      setExpanded(true);
+      revealPanel();
+    }
+  }
 
   function onKeyDown(event: React.KeyboardEvent, index: number) {
     const destinations: Record<string, number> = {
@@ -40,7 +79,7 @@ export function TrainingBrowser() {
         <div className="pathway-header">
           <span>SESSION SELECTOR</span>
           <span><Counter value={8} pad={2} /> SESSIONS</span>
-          <span>HOVER / FOCUS TO INSPECT</span>
+          <span>CLICK TO OPEN</span>
         </div>
 
         <div className="pathway-list training-page-list" role="tablist" aria-label="Training sessions" aria-orientation="vertical">
@@ -55,13 +94,14 @@ export function TrainingBrowser() {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
+                aria-expanded={isActive && expanded}
                 aria-controls="training-section-panel"
                 tabIndex={isActive ? 0 : -1}
                 key={session.number}
                 className={isActive ? 'is-active' : ''}
-                onMouseEnter={() => setActiveIndex(index)}
-                onFocus={() => setActiveIndex(index)}
-                onClick={() => setActiveIndex(index)}
+                onMouseEnter={() => preview(index)}
+                onFocus={() => preview(index)}
+                onClick={() => selectOrToggle(index)}
                 onKeyDown={(event) => onKeyDown(event, index)}
                 {...(reduceMotion
                   ? {}
@@ -87,12 +127,13 @@ export function TrainingBrowser() {
 
         <div
           id="training-section-panel"
-          className="pathway-visual training-page-visual"
+          ref={panelRef}
+          className={`pathway-visual training-page-visual${expanded ? ' is-expanded' : ''}`}
           role="tabpanel"
           aria-labelledby={`training-tab-${active.number}`}
           tabIndex={0}
         >
-          <div className="pathway-frame training-page-frame">
+          <div className="pathway-frame training-page-frame" aria-hidden={expanded || undefined}>
             <AnimatePresence mode="wait">
               <motion.img
                 key={`${active.number}-${active.image}`}
@@ -159,6 +200,44 @@ export function TrainingBrowser() {
                 </div>
               </motion.div>
             </AnimatePresence>
+          </div>
+
+          <div className="training-breakdown-wrap">
+            <div className="training-breakdown" inert={!expanded}>
+              <motion.div
+                key={active.number}
+                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease }}
+              >
+                <p className="tb-label">What this session covers</p>
+                <ul className="tb-covers">
+                  {active.covers.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+
+                <p className="tb-label">Knowledge criteria</p>
+                <dl className="tb-criteria">
+                  {fullText(active.knowledge).map(({ id, text }) => (
+                    <div key={id}>
+                      <dt className="tb-code tb-code-K">{id}</dt>
+                      <dd>{text}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <p className="tb-label">Skills criteria</p>
+                <dl className="tb-criteria">
+                  {fullText(active.skills).map(({ id, text }) => (
+                    <div key={id}>
+                      <dt className="tb-code tb-code-S">{id}</dt>
+                      <dd>{text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

@@ -761,10 +761,12 @@ a.pm-card { cursor: pointer; }
     var(--ink);
 }
 .training-page-system {
-  grid-template-rows: 48px minmax(730px, 1fr);
+  grid-template-rows: 48px minmax(680px, auto);
   border-bottom: 0;
 }
-.training-page-list { grid-template-rows: repeat(8, 1fr); }
+/* The list keeps its own height; the content row grows below it when a session
+   is expanded rather than stretching the eight buttons. */
+.training-page-list { grid-template-rows: repeat(8, minmax(84px, 1fr)); align-self: start; }
 .training-page-list button {
   min-height: 0;
   grid-template-columns: 58px minmax(220px, 1fr) 28px;
@@ -790,8 +792,39 @@ a.pm-card { cursor: pointer; }
 }
 .training-page-visual:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
 .training-page-frame > img { object-position: center; }
-.training-page-detail { min-height: 330px; }
+.training-page-detail { min-height: 300px; }
 .training-page-detail h3 { max-width: 18ch; }
+
+/* Click-to-open. The visual stacks (block, not the pathway grid); clicking a
+   session collapses the frame — the image slides up and out — and drops the
+   breakdown in below the overview. */
+.training-page-visual { display: block; }
+.training-page-frame { height: clamp(340px, 42vh, 460px); transition: height 520ms var(--ease-out), opacity 320ms ease; }
+.training-page-frame img { transition: transform 520ms var(--ease-out); }
+.training-page-visual.is-expanded .training-page-frame { height: 0; opacity: 0; pointer-events: none; }
+.training-page-visual.is-expanded .training-page-frame img { transform: translateY(-48px); }
+
+.training-breakdown-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms var(--ease-out);
+  background: rgba(5, 8, 6, .82);
+}
+.training-page-visual.is-expanded .training-breakdown-wrap { grid-template-rows: 1fr; }
+.training-breakdown { display: grid; min-height: 0; overflow: hidden; }
+.training-breakdown > div { grid-area: 1 / 1; padding: 22px 26px 36px; border-top: 1px solid var(--rule); }
+
+.tb-label { margin: 22px 0 10px; color: var(--meta); font-family: var(--body); font-size: 9px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.tb-label:first-child { margin-top: 0; }
+.tb-covers { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.tb-covers li { position: relative; padding-left: 18px; color: #b6beb8; font-size: 13px; line-height: 1.55; }
+.tb-covers li::before { position: absolute; top: .5em; left: 1px; width: 5px; height: 5px; background: var(--viridian); content: ''; transform: rotate(45deg); }
+.tb-criteria { display: grid; gap: 12px; margin: 0; }
+.tb-criteria > div { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+.tb-criteria dt { margin: 0; font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: .08em; }
+.tb-criteria dd { margin: 0; color: #a7afa9; font-size: 12px; line-height: 1.62; }
+.tb-code-K { color: var(--viridian); }
+.tb-code-S { color: var(--orange); }
 .training-page-covers {
   display: grid;
   gap: 8px;
@@ -833,8 +866,9 @@ a.pm-card { cursor: pointer; }
   .training-page-list .pathway-number { font-size: 25px; }
   .training-page-list .pathway-name { font-size: 18px; }
   .training-page-frame { min-height: 420px; }
+  .training-page-visual.is-expanded .training-page-frame { min-height: 0; }
   .training-page-detail { min-height: 0; padding: 24px 16px 32px; }
-  .training-page-covers li { font-size: 13px; }
+  .training-breakdown > div { padding: 20px 16px 30px; }
 }
 
 /* ---------- Projects page ---------- */
