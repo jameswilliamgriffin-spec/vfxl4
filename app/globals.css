@@ -237,7 +237,7 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
 .pathway-detail > div { grid-area: 1 / 1; }
 .detail-eyebrow { display: block; color: var(--orange); font-size: var(--eyebrow-sm); font-weight: var(--eyebrow-weight); letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
 .pathway-detail h3 { margin: 14px 0 12px; font-family: var(--display); font-size: clamp(24px, 1.9vw, 32px); font-weight: 300; letter-spacing: -.035em; line-height: 1; }
-.pathway-detail p { margin: 0; color: #b6beb8; font-size: 13px; line-height: 1.66; }
+.pathway-detail p { margin: 0; max-width: 60ch; color: #b6beb8; font-size: 13px; line-height: 1.66; }
 .visual-index { position: absolute; top: 22px; left: 22px; display: grid; width: 105px; grid-template-columns: auto 1fr; align-items: end; gap: 3px 9px; }
 .visual-index span { grid-column: 1; color: #c3cac5; font-size: 7px; font-weight: 500; letter-spacing: .16em; }
 .visual-index strong { grid-column: 1; color: var(--paper); font-family: var(--display); font-size: 54px; font-weight: 300; line-height: .85; }
@@ -328,6 +328,13 @@ a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
   .pathway-detail { min-height: 0; padding: 22px 16px 28px; }
   .section-end { padding: 0 16px; font-size: 7px; }
   .section-end-label { padding: 0 10px; }
+}
+
+/* Five nav items get tight on the smallest phones — shrink the label a step
+   so "TRAINING PLAN" doesn't clip. */
+@media (max-width: 400px) {
+  .main-nav a { padding: 0 2px; font-size: 8px; letter-spacing: .07em; }
+  .main-nav a:last-child { flex: 1.2; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1778,24 +1785,26 @@ body.intro-running { overflow: hidden; }
 
 .pb-lede {
   margin: 0 0 6px;
+  max-width: 66ch;
   color: #cbd2cc;
   font-family: var(--display);
   font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 300;
   line-height: 1.5;
 }
+.tb-covers { max-width: 64ch; }
 .pb-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .pb-tags li {
   padding: 4px 9px;
   border: 1px solid rgba(139, 202, 184, .34);
-  border-radius: 5px;
+  border-radius: 3px;
   color: var(--viridian);
   font-family: var(--display);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .1em;
 }
-.pb-lead { margin: 0; color: #b6beb8; font-size: 13px; line-height: 1.66; }
+.pb-lead { margin: 0; max-width: 60ch; color: #b6beb8; font-size: 13px; line-height: 1.66; }
 
 @media (max-width: 760px) {
   #pathways .pathway-list { grid-template-rows: none; }
