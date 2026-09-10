@@ -26,6 +26,18 @@ const pathways = [
     alt: 'A performer suspended on wires in front of a green screen on a Viridian Academy production',
     summary:
       'Prepares the elements that make up a finished shot. You trace and mask objects frame by frame, pull keys from green screen, paint out rigs and wires, and layer live action with computer-generated imagery so the result reads as one image caught by a single camera. A craft built on composition and colour.',
+    detail:
+      'The finishing craft of the shot — the last hands on the image before it reaches the client. You work in a node-based compositor, combining plates, CG renders, matte paintings and stock elements into one frame, then match grain, lens character, black levels and colour until nothing reads as an effect.',
+    does: [
+      'Rotoscoping and paint — hand-traced mattes, rig and wire removal, clean-plate reconstruction',
+      'Keying — pulling and refining green-screen mattes, edge treatment and despill',
+      'Integrating CG and elements into the plate: grade match, light wrap, defocus, motion blur, grain',
+      '2D tracking, stabilisation, screen inserts and set extensions',
+      'Checking your shots against the cut and taking supervisor and client notes',
+    ],
+    techniques: ['NUKE', 'KEYING', 'ROTO + PAINT', 'DESPILL', 'GRAIN MATCH', '2D TRACKING', 'LIGHT WRAP'],
+    progression:
+      'Builds toward mid and senior compositor — harder shots, then whole sequences, then the look of a show.',
   },
   {
     number: '02',
@@ -36,6 +48,18 @@ const pathways = [
     alt: 'A performer in a motion-capture suit and head-mounted camera being directed at Viridian Academy',
     summary:
       'Builds what was never filmed. You model the props, environments and characters that appear in the final shot, and use on-set data and tracking markers to match the camera so those assets sit convincingly in the plate. A craft built on sculpting, cameras and storytelling.',
+    detail:
+      'Builds what the camera never saw — props, vehicles, environments and creatures — and makes them behave as if a real camera had photographed them. You work from concept art, reference and the data captured on set, so scale, placement and lens all agree with the plate.',
+    does: [
+      'Modelling hard-surface and organic assets from concept and reference — clean topology, true scale',
+      'Texturing and look development: UVs, PBR materials, wear and story detail',
+      'Matchmove — solving the shot camera and objects from the plate and on-set data',
+      'Layout and set dressing so assets sit correctly in the tracked scene',
+      'Lighting and rendering to match the plate, delivering the passes the compositor needs',
+    ],
+    techniques: ['MAYA', 'MODELLING', 'UV + TEXTURING', 'PBR LOOKDEV', 'MATCHMOVE', 'LAYOUT', 'RENDER PASSES'],
+    progression:
+      'Leads to specialist modelling, look development, lighting or matchmove — and on to lead and supervisor roles.',
   },
   {
     number: '03',
@@ -46,6 +70,18 @@ const pathways = [
     alt: 'A motion-capture volume at Viridian Academy, with technical operators at workstations',
     summary:
       'Keeps the production running underneath the artwork. You support and troubleshoot the pipeline and workflow tools, give technical help to people in the creative departments, manage data and resources, and write small-scale tools to solve the problems that keep recurring.',
+    detail:
+      'Sits under the artwork rather than in it. You keep the pipeline and tools that move work between departments running, unblock artists when something breaks, look after data and render resources, and automate the repetitive jobs so nobody does them by hand.',
+    does: [
+      'First-line technical support for artists across compositing, CG and FX',
+      'Writing and maintaining small tools and scripts — mostly Python — that automate pipeline steps',
+      "Managing assets, versions, publishes and dependencies so shots don't lose data",
+      'Watching the render farm: chasing failed frames, balancing resources',
+      'Testing and rolling out software and pipeline changes, and documenting them',
+    ],
+    techniques: ['PYTHON', 'PIPELINE TOOLS', 'VERSION CONTROL', 'RENDER FARM', 'USD', 'DEBUGGING', 'AUTOMATION'],
+    progression:
+      'Progresses to pipeline TD, then senior or lead TD and pipeline developer — designing the systems a facility runs on.',
   },
 ];
 
@@ -79,8 +115,44 @@ const disciplines = [
 export function ApprenticeshipOverview() {
   const reduceMotion = useReducedMotion();
   const [activePathway, setActivePathway] = useState(0);
+  // Click peels the image away and reveals the full pathway breakdown. Clicking
+  // the open pathway again collapses it; clicking another switches straight to
+  // its breakdown. Same interaction as the training page.
+  const [expanded, setExpanded] = useState(false);
+  const visualRef = useRef<HTMLDivElement>(null);
   const active = pathways[activePathway];
   const reveal = reduceMotion ? {} : { initial: { opacity: 0, y: 42 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.18 }, transition: { duration: 0.8, ease } };
+
+  // Hover / focus previews a pathway — but only while nothing is open, so moving
+  // the cursor across the list toward the panel can't clip another pathway.
+  function preview(index: number) {
+    if (expanded) return;
+    setActivePathway(index);
+  }
+
+  // On mobile the panel sits below the list, so bring it into view on open.
+  function revealPanel() {
+    if (typeof window === 'undefined' || window.innerWidth > 760) return;
+    requestAnimationFrame(() =>
+      visualRef.current?.scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'start',
+      }),
+    );
+  }
+
+  function selectOrToggle(index: number) {
+    if (index === activePathway) {
+      setExpanded((v) => {
+        if (!v) revealPanel();
+        return !v;
+      });
+    } else {
+      setActivePathway(index);
+      setExpanded(true);
+      revealPanel();
+    }
+  }
 
   // Cursor-position parallax on the pathway frame, plus a live coordinate readout
   // (the CREATIVE ALLIANCE line drifts with the cursor, snapping back on leave).
@@ -139,7 +211,7 @@ export function ApprenticeshipOverview() {
           </p>
         </motion.div>
         <div className="pathway-header">
-          <span>PATHWAY SELECTOR</span><span><Counter value={3} pad={2} /> PATHWAYS</span><span>HOVER / FOCUS TO INSPECT</span>
+          <span>PATHWAY SELECTOR</span><span><Counter value={3} pad={2} /> PATHWAYS</span><span>CLICK TO OPEN</span>
         </div>
         <div className="pathway-list">
           <motion.div
@@ -165,10 +237,12 @@ export function ApprenticeshipOverview() {
               key={pathway.number}
               className={activePathway === index ? 'is-active' : ''}
               aria-pressed={activePathway === index}
+              aria-expanded={activePathway === index && expanded}
+              aria-controls="pathway-panel"
               data-cursor-label="VIEW PATHWAY →"
-              onMouseEnter={() => setActivePathway(index)}
-              onFocus={() => setActivePathway(index)}
-              onClick={() => setActivePathway(index)}
+              onMouseEnter={() => preview(index)}
+              onFocus={() => preview(index)}
+              onClick={() => selectOrToggle(index)}
               {...(reduceMotion ? {} : { initial: { opacity: 0, x: -28 }, whileInView: { opacity: 1, x: 0 }, viewport: { once: true, amount: 0.55 }, transition: { duration: 0.65, delay: index * 0.08, ease } })}
             >
               <span className="pathway-number">{pathway.number}</span>
@@ -178,8 +252,17 @@ export function ApprenticeshipOverview() {
             </motion.button>
           ))}
         </div>
-        <div className="pathway-visual">
-          <div className="pathway-frame" ref={frameRef} data-cursor-label="INSPECT">
+        <div
+          id="pathway-panel"
+          ref={visualRef}
+          className={`pathway-visual pathway-visual--expand${expanded ? ' is-expanded' : ''}`}
+        >
+          <div
+            className="pathway-frame"
+            ref={frameRef}
+            data-cursor-label="INSPECT"
+            aria-hidden={expanded || undefined}
+          >
             <div className="pathway-frame-inner" ref={targetRef}>
               <AnimatePresence mode="wait">
                 <motion.img
@@ -228,6 +311,36 @@ export function ApprenticeshipOverview() {
                 <p>{active.summary}</p>
               </motion.div>
             </AnimatePresence>
+          </div>
+
+          <div className="pathway-breakdown-wrap">
+            <div className="pathway-breakdown" inert={!expanded}>
+              <motion.div
+                key={active.number}
+                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease }}
+              >
+                <p className="pb-lede">{active.detail}</p>
+
+                <p className="tb-label">What you&rsquo;ll be doing</p>
+                <ul className="tb-covers">
+                  {active.does.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+
+                <p className="tb-label">Techniques you&rsquo;ll build</p>
+                <ul className="pb-tags">
+                  {active.techniques.map((technique) => (
+                    <li key={technique}>{technique}</li>
+                  ))}
+                </ul>
+
+                <p className="tb-label">Where it leads</p>
+                <p className="pb-lead">{active.progression}</p>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

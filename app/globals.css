@@ -1728,3 +1728,59 @@ body.intro-running { overflow: hidden; }
 .hero-academy-link:hover { text-decoration: underline; text-underline-offset: 4px; }
 .hero-academy-link:hover i { transform: translate(2px, -2px); }
 .hero-academy-link:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
+
+/* ---------- Homepage pathways — click to open the full breakdown ---------- */
+/* Mirrors the /training interaction: the image peels away and a written
+   breakdown of the pathway drops in below the overview. */
+
+#pathways.pathway-system { grid-template-rows: auto 48px minmax(720px, auto); }
+#pathways .pathway-list { align-self: start; grid-template-rows: repeat(3, minmax(220px, auto)); }
+
+.pathway-visual--expand { display: block; }
+.pathway-visual--expand .pathway-frame {
+  height: clamp(360px, 46vh, 520px);
+  transition: height 520ms var(--ease-out), opacity 340ms ease, transform 520ms var(--ease-out);
+}
+.pathway-visual--expand.is-expanded .pathway-frame {
+  height: 0;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-40px);
+  pointer-events: none;
+}
+
+.pathway-breakdown-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms var(--ease-out);
+  background: rgba(5, 8, 6, .82);
+}
+.pathway-visual--expand.is-expanded .pathway-breakdown-wrap { grid-template-rows: 1fr; }
+.pathway-breakdown { display: grid; min-height: 0; overflow: hidden; }
+.pathway-breakdown > div { grid-area: 1 / 1; padding: 26px 26px 36px; border-top: 1px solid var(--rule); }
+
+.pb-lede {
+  margin: 0 0 6px;
+  color: #cbd2cc;
+  font-family: var(--display);
+  font-size: clamp(15px, 1.1vw, 18px);
+  font-weight: 300;
+  line-height: 1.5;
+}
+.pb-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.pb-tags li {
+  padding: 4px 9px;
+  border: 1px solid rgba(139, 202, 184, .34);
+  border-radius: 5px;
+  color: var(--viridian);
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+}
+.pb-lead { margin: 0; color: #b6beb8; font-size: 13px; line-height: 1.66; }
+
+@media (max-width: 760px) {
+  #pathways .pathway-list { grid-template-rows: none; }
+  .pathway-breakdown > div { padding: 20px 16px 30px; }
+}
